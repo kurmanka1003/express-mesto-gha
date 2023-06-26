@@ -24,7 +24,7 @@ const formatCard = (card) => ({
     _id: user._id,
   })),
   _id: card._id,
-  name: card.title,
+  name: card.name,
   link: card.link,
   owner: {
     name: card.owner.name,
@@ -75,7 +75,7 @@ const deleteCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {
-        return next(new BadRequestError('Карточка с указанным id не найдена.'));
+        return next(new BadRequestError('Невалидный идентификатор карточки.'));
       }
 
       if (err instanceof mongoose.Error.DocumentNotFoundError) {
@@ -111,7 +111,7 @@ const likeCard = (req, res, next) => {
 };
 
 const dislikeCard = (req, res, next) => {
-  const updateQuery = { $addToSet: { likes: req.user._id } };
+  const updateQuery = { $pull: { likes: req.user._id } };
   updateCardLikes(req, res, updateQuery, next);
 };
 

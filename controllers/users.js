@@ -38,7 +38,7 @@ const getUserById = (req, res, next) => {
     })
     .catch((err) => {
       if (err instanceof Error.CastError) {
-        return next(new BadRequestError('Пhееданы некорректные данные.'));
+        return next(new BadRequestError('Переданы некорректные данные.'));
       }
 
       if (err instanceof Error.DocumentNotFoundError) {

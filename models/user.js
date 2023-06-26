@@ -30,8 +30,6 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Поле должно быть заполнено'],
     select: false,
   },
-}, {
-   versionKey: false
-});
+}, { versionKey: false });
 
 module.exports = mongoose.model('user', userSchema);

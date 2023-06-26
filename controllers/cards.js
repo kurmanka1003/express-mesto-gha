@@ -54,7 +54,6 @@ const createCard = (req, res, next) => {
       if (err instanceof mongoose.Error.ValidationError) {
         return next(new BadRequestError('Переданы некорректные данные при создании карточки.'));
       }
-
       return next(err);
     });
 };
@@ -67,7 +66,6 @@ const deleteCard = (req, res, next) => {
       if (card.owner._id.toString() !== userId) {
         throw new ForbiddenError('Нет прав для удаления карточки с указанным id');
       }
-
       return Card.deleteOne({ _id: req.params.cardId })
         .then(() => {
           res.status(SUCCESS_STATUS).send({ message: 'Карточка удалена.' });
@@ -77,11 +75,9 @@ const deleteCard = (req, res, next) => {
       if (err instanceof mongoose.Error.CastError) {
         return next(new BadRequestError('Карточка с указанным id не найдена.'));
       }
-
       if (err instanceof mongoose.Error.DocumentNotFoundError) {
         return next(new NotFoundError('Передан несуществующий id карточки.'));
       }
-
       return next(err);
     });
 };
@@ -99,7 +95,6 @@ const updateCardLikes = (req, res, updateQuery, next) => {
       if (err instanceof mongoose.Error.CastError) {
         return next(new BadRequestError('Переданы некорректные данные для постановки или снятия лайка.'));
       }
-
       return next(err);
     });
 };

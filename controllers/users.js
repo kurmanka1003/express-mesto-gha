@@ -40,11 +40,9 @@ const getUserById = (req, res, next) => {
       if (err instanceof Error.CastError) {
         return next(new BadRequestError('Переданы некорректные данные.'));
       }
-
       if (err instanceof Error.DocumentNotFoundError) {
         return next(new NotFoundError('Пользователь по указанному id не найден.'));
       }
-
       return next(err);
     });
 };
@@ -96,12 +94,10 @@ const login = (req, res, next) => {
         const token = jwt.sign({ _id: user._id }, config.jwtSecretKey, {
           expiresIn: '7d',
         });
-
         res.cookie('jwtToken', token, {
           maxAge: 3600,
           httpOnly: true,
         });
-
         return res.send({ jwtToken: token });
       }
       throw new UnauthorizedError('Передан неверный e-mail или пароль');
@@ -110,7 +106,6 @@ const login = (req, res, next) => {
       if (err instanceof Error.DocumentNotFoundError) {
         return next(new UnauthorizedError('Передан неверный e-mail или пароль'));
       }
-
       return next(err);
     });
 };
@@ -127,7 +122,6 @@ const updateUser = (req, res, updateData, next) => {
       if (err instanceof mongoose.Error.ValidationError) {
         return next(new BadRequestError('Переданы некорректные данные при обновлении пользователя.'));
       }
-
       return next(err);
     });
 };

@@ -44,9 +44,9 @@ const getCards = (req, res, next) => {
 
 const createCard = (req, res, next) => {
   const { name, link } = req.body;
-  Card.create({ title: name, link, owner: req.user._id })
+  Card.create({ name, link, owner: req.user._id })
     .then((card) => res.status(CREATED_STATUS).send({
-      name: card.title,
+      name: card.name,
       link: card.link,
       _id: card._id,
     }))

@@ -1,25 +1,25 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const helmet = require('helmet');
-const router = require('./routes');
+const cookieParser = require('cookie-parser');
+
+const errors = require('./middlewares/errorHandler');
 
 const { PORT = 3000 } = process.env;
 
-mongoose.connect('mongodb://localhost:27017/mestodb');
+mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 const app = express();
 
 app.use(express.json());
 
-app.use(helmet());
+app.use(cookieParser());
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '648f3e4692bd73155a701028',
-  };
-  next();
+app.use(require('./routes/index'));
+
+app.use(errors);
+
+app.listen(PORT, () => {
 });
-
-app.use(router);
-
-app.listen(PORT);

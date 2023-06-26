@@ -5,15 +5,16 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 const config = require('../utils/config');
-const {
-  SUCCESS_STATUS,
-  CREATED_STATUS,
-} = require('../utils/constants');
 
 const BadRequestError = require('../utils/errors/badRequestError');
 const UnauthorizedError = require('../utils/errors/unauthorizedError');
 const NotFoundError = require('../utils/errors/notFoundError');
 const ConflictError = require('../utils/errors/conflictError');
+
+const {
+  SUCCESS_STATUS,
+  CREATED_STATUS,
+} = require('../utils/constants');
 
 const formatUserData = (user) => ({
   name: user.name,

@@ -1,14 +1,15 @@
 const mongoose = require('mongoose');
 
 const Card = require('../models/card');
-const {
-  SUCCESS_STATUS,
-  CREATED_STATUS,
-} = require('../utils/constants');
 
 const BadRequestError = require('../utils/errors/badRequestError');
 const NotFoundError = require('../utils/errors/notFoundError');
 const ForbiddenError = require('../utils/errors/forbiddenError');
+
+const {
+  SUCCESS_STATUS,
+  CREATED_STATUS,
+} = require('../utils/constants');
 
 const populateOptions = [
   { path: 'likes', select: ['name', 'about', 'avatar', '_id'] },
@@ -63,19 +64,19 @@ const deleteCard = (req, res, next) => {
     .orFail()
     .then((card) => {
       if (card.owner._id.toString() !== userId) {
-        throw new ForbiddenError('Нет прав для удаления карточки с указанным _id');
+        throw new ForbiddenError('Нет прав для удаления карточки с указанным id');
       }
       return Card.deleteOne({ _id: req.params.cardId })
         .then(() => {
-          res.status(SUCCESS_STATUS).send({ message: 'Пост удалён.' });
+          res.status(SUCCESS_STATUS).send({ message: 'Карточка удалена.' });
         });
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {
-        return next(new BadRequestError('Карточка с указанным _id не найдена.'));
+        return next(new BadRequestError('Карточка с указанным id не найдена.'));
       }
       if (err instanceof mongoose.Error.DocumentNotFoundError) {
-        return next(new NotFoundError('Передан несуществующий _id карточки.'));
+        return next(new NotFoundError('Передан несуществующий id карточки.'));
       }
       return next(err);
     });
@@ -86,13 +87,13 @@ const updateCardLikes = (req, res, updateQuery, next) => {
     .populate(populateOptions)
     .then((card) => {
       if (!card) {
-        throw new NotFoundError('Передан несуществующий _id карточки.');
+        throw new NotFoundError('Передан несуществующий id карточки.');
       }
       res.status(SUCCESS_STATUS).send(formatCard(card));
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {
-        return next(new BadRequestError('Переданы некорректные данные для постановки/снятии лайка.'));
+        return next(new BadRequestError('Переданы некорректные данные для постановки или снятия лайка.'));
       }
       return next(err);
     });
